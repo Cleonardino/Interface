@@ -9,6 +9,7 @@ import sys
 from constants import *
 from utils import print_log
 from clock import init_schedule
+from message_manager import process_message
 
 # Loading secret token
 load_dotenv()
@@ -38,7 +39,7 @@ async def message_received(message : Message) -> None:
         # Not private message
         await message.author.send("The Interface will only answer to private message")
         return
-    
+    process_message(message)
 
 # Bot startup
 @client.event

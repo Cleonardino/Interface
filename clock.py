@@ -9,7 +9,8 @@ async def events_loop():
     current_time = int(time.time() / 60)
 
     # Update global_timer
-    sm.set_state("global_timer",current_time)
+    sm.state["global_timer"] = current_time
+    sm.save_state()
 
 async def init_schedule():
     events_loop.start()
