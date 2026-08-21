@@ -1,3 +1,4 @@
+import datetime
 from random import sample
 
 from constants import *
@@ -33,5 +34,8 @@ def process_message(text : str, clutter_proportion: float = 0.1):
 	result = "".join(result_list)
     
 	return result
-print(banwords)
-print(process_message("coucou, je voulais tester l'interface"))
+
+def print_log(text : str):
+    with open(LOG_FILE, mode="a", encoding="utf-8") as file:
+        file.write("\n" + str(datetime.datetime.now()) + text)
+        print(text)

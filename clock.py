@@ -1,10 +1,6 @@
-import random
-from discord import Client
 from discord.ext import tasks
 import time
 import state_manager as sm
-
-client : Client
 
 @tasks.loop(seconds=60)
 async def events_loop():
@@ -15,7 +11,5 @@ async def events_loop():
     # Update global_timer
     sm.set_state("global_timer",current_time)
 
-async def init_schedule(global_client):
-    global client
-    client = global_client
+async def init_schedule():
     events_loop.start()

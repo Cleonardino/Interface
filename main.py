@@ -7,6 +7,8 @@ import clock
 import signal
 import sys
 from constants import *
+from utils import print_log
+from clock import init_schedule
 
 # Loading secret token
 load_dotenv()
@@ -26,26 +28,23 @@ def shutdown(signal, frame):
 
 signal.signal(signal.SIGINT, shutdown)
 
-def print_log(text : str):
-    with open(LOG_FILE, mode="a", encoding="utf-8") as file:
-        file.write("\n" + + text)
-        print(text)
-
-async def message_received(message : Message, user_message : str) -> None:
+async def message_received(message : Message) -> None:
     '''Message received event function.'''
-    if message.channel.type.name != "private":
-        # Not private message
-        await message.author.send("The Interface will only answer to private message")
-    if user_message == "":
+    if message.content == "":
         # Empty message
         print_log('Message was empty because intents were disabled')
         return
-    print_log("Message received !")
+    if message.channel.type.name != "private":
+        # Not private message
+        await message.author.send("The Interface will only answer to private message")
+        return
+    
 
 # Bot startup
 @client.event
 async def on_ready() -> None:
     '''Callback function when bot is ready.'''
+    await init_schedule()
     print_log(str(client.user) + " is now running")
 
 # Handle incoming messages
@@ -55,7 +54,7 @@ async def on_message(message : Message) -> None:
     if message.author == client.user:
         # Message from bot itself, don't do anything
         return
-    await message_received(message=message, user_message=message.content)
+    await message_received(message=message)
 
 # Main entry point
 def main() -> None:
