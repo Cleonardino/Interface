@@ -2,6 +2,7 @@ import random
 from discord import Client
 from discord.ext import tasks
 import time
+import state_manager as sm
 
 client : Client
 
@@ -12,8 +13,7 @@ async def events_loop():
     current_time = int(time.time() / 60)
 
     # Update global_timer
-    gamestate.global_timer = current_time
-    gamestate.save()
+    sm.set_state("global_timer",current_time)
 
 async def init_schedule(global_client):
     global client

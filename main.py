@@ -1,7 +1,8 @@
 from typing import Final
+import state_manager as sm
 import os
 from dotenv import load_dotenv
-from discord import Client, Intents, Message, User
+from discord import Client, Intents, Message
 import clock
 import signal
 import sys
@@ -16,26 +17,25 @@ intents : Intents = Intents.default()
 intents.message_content = True
 client : Client = Client(intents=intents)
 
-def shutdown():
+# Interrupt signal handler
+def shutdown(signal, frame):
     '''Shutdown the bot properly.'''
     print('KeyboardInterrupt : starting shutdown process')
-
+    sm.save_state()
     sys.exit(0)
 
-# Interrupt signal handler
-def signal_handler(signal, frame):
-    '''Called when signal signal is raised.'''
-    shutdown()
-
-signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGINT, shutdown)
 
 def print_log(text : str):
     with open(LOG_FILE, mode="a", encoding="utf-8") as file:
-        file.write(text)
+        file.write("\n" + + text)
         print(text)
 
 async def message_received(message : Message, user_message : str) -> None:
     '''Message received event function.'''
+    if message.channel.type.name != "private":
+        # Not private message
+        await message.author.send("The Interface will only answer to private message")
     if user_message == "":
         # Empty message
         print_log('Message was empty because intents were disabled')
