@@ -8,6 +8,7 @@ def generate_random_id():
     result = ""
     for i in range(5):
         result += random_letter()
+    return result
 
 def create_unique_fake_id():
 	# User not in database, add it and associate a unique id
