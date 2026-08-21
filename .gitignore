@@ -1,7 +1,3 @@
-log.txt
-banwords.txt
-game_state.json
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -220,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+log.txt
+banwords.txt
+game_state.json
