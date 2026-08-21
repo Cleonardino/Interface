@@ -2,10 +2,10 @@ from typing import Final
 import os
 from dotenv import load_dotenv
 from discord import Client, Intents, Message, User
-import scheduler
+import clock
 import signal
 import sys
-import constants as cst
+from constants import *
 
 # Loading secret token
 load_dotenv()
@@ -30,7 +30,7 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 def print_log(text : str):
-    with open(cst.LOG_FILE, mode="a", encoding="utf-8") as file:
+    with open(LOG_FILE, mode="a", encoding="utf-8") as file:
         file.write(text)
         print(text)
 
