@@ -2,6 +2,7 @@ import state_manager as sm
 from constants import *
 from random import randint
 from utils import process_message
+from setup import client
 
 # Try to create a send order for the target; checking if it exists and if content is not empty
 def try_send_order(source : str, target : str, content : str, stabilized : bool = False) -> str:
@@ -38,4 +39,15 @@ async def update_orders():
     
     # Send the messages, delete the order
     for id in to_send:
-        pass
+        true_id = sm.state[sm.SM_FAKE_IDS][sm.state[sm.SM_TO_SEND][id][sm.TS_TARGET]]
+        source = sm.state[sm.SM_TO_SEND][id][sm.TS_SOURCE]
+        content = sm.state[sm.SM_TO_SEND][id][sm.TS_CONTENT]
+        user = await client.fetch_user(true_id)
+        cur_message : str = "`////////////RECEIVED==\nMESSAGE#{message_id} FROM {source}`\n`".format(
+						message_id=id,source=source
+						)
+        cur_message += "CONTENT:\n" + process_message(content) + "`"
+        if user:
+            await user.send(
+				cur_message
+			)
