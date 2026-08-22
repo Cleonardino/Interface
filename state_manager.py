@@ -9,6 +9,7 @@ SM_USERS = "users"
 SM_USERS = "users"
 USR_FAKE_ID = "fake_id"
 USR_SYNT_ROT = "synt_rot"
+USR_SYNT_MAX = "synt_max"
 USR_TARGET = "target"
 
 def save_state():

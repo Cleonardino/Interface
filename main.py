@@ -23,7 +23,7 @@ client : Client = Client(intents=intents)
 # Interrupt signal handler
 def shutdown(signal, frame):
     '''Shutdown the bot properly.'''
-    print('KeyboardInterrupt : starting shutdown process')
+    print_log('KeyboardInterrupt : starting shutdown process')
     sm.save_state()
     sys.exit(0)
 
@@ -39,7 +39,7 @@ async def message_received(message : Message) -> None:
         # Not private message
         await message.author.send("The Interface will only answer to private message")
         return
-    process_message(message)
+    await process_message(message)
 
 # Bot startup
 @client.event

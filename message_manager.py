@@ -1,10 +1,10 @@
 from discord import Message
 import state_manager as sm
 from id_manager import create_unique_fake_id
+from synthetize import synthetize
 
-
-def process_message(message : Message):
-    user_id = message.author.id
+async def process_message(message : Message):
+    user_id = str(message.author.id)
     if user_id not in sm.state[sm.SM_USERS]:
         # User not in database, add it and associate a unique id
         fake_id = create_unique_fake_id()
@@ -15,3 +15,10 @@ def process_message(message : Message):
 		    sm.USR_FAKE_ID: fake_id
 		}
         sm.save_state()
+    
+    # Detecting commands and valid messages
+    content : str = message.content.lower()
+    
+    # Synthetize
+    if content.startswith("synt"):
+        await message.author.send(synthetize(user_id=user_id))
