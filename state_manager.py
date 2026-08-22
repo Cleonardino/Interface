@@ -33,5 +33,7 @@ with open(GAMESTATE_PATH, 'r', encoding='utf-8') as file:
         state[SM_USERS] = {}
     if SM_FAKE_IDS not in state:
         state[SM_FAKE_IDS] = {}
+    if SM_TO_SEND not in state:
+            state[SM_TO_SEND] = {}
     if SM_MSG_COUNTER not in state:
             state[SM_MSG_COUNTER] = 12

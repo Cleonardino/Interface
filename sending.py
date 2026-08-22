@@ -4,7 +4,6 @@ from random import randint
 
 # Try to create a send order for the target; checking if it exists and if content is not empty
 def try_send_order(source : str, target : str, content : str, stabilized : bool = False) -> str:
-    
     if target not in sm.state[sm.SM_FAKE_IDS]:
         return "`////////////SEND==\nERROR:USER {target} DOES NOT EXIST`".format(target=target)
     
@@ -23,7 +22,8 @@ def try_send_order(source : str, target : str, content : str, stabilized : bool 
 		sm.TS_CONTENT : content
 	}
     
-    sm.SM_MSG_COUNTER += randint(3,12)
+    sm.state[sm.SM_MSG_COUNTER] += randint(3,12)
     return "`////////////SEND==\nMESSAGE#{message_id} SENT SUCCESSFULLY TO {target}`".format(
         message_id=message_id,target=target
         )
+
