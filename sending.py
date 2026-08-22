@@ -1,6 +1,7 @@
 import state_manager as sm
 from constants import *
 from random import randint
+from utils import process_message
 
 # Try to create a send order for the target; checking if it exists and if content is not empty
 def try_send_order(source : str, target : str, content : str, stabilized : bool = False) -> str:
@@ -27,3 +28,14 @@ def try_send_order(source : str, target : str, content : str, stabilized : bool 
         message_id=message_id,target=target
         )
 
+# Update the orders, sending messages if needed
+async def update_orders():
+    # Retrieve messages to send
+    to_send : list[str] = []
+    for id in sm.state[sm.SM_TO_SEND]:
+        if sm.state[sm.SM_TO_SEND][id][sm.TS_TIME] <= sm.state[sm.SM_TIME]:
+            to_send.append(id)
+    
+    # Send the messages, delete the order
+    for id in to_send:
+        pass

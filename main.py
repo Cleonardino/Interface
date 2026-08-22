@@ -2,23 +2,20 @@ from typing import Final
 import state_manager as sm
 import os
 from dotenv import load_dotenv
-from discord import Client, Intents, Message
-import clock
+from discord import Message
 import signal
 import sys
 from constants import *
 from utils import print_log
 from clock import init_schedule
 from message_manager import process_message
+from setup import client
 
 # Loading secret token
 load_dotenv()
 TOKEN : Final[str] = os.getenv('DISCORD_TOKEN')
 
-## Setup
-intents : Intents = Intents.default()
-intents.message_content = True
-client : Client = Client(intents=intents)
+
 
 # Interrupt signal handler
 def shutdown(signal, frame):

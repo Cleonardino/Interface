@@ -16,7 +16,7 @@ with open(BANWORDS_PATH, mode="r",encoding="utf-8") as file:
 		banwords.append((word,replacement))
 
 # Apply transformations to a message
-def process_message(text : str, clutter_proportion: float = 0.1):
+def process_message(text : str, clutter_proportion: float = 0.05):
 	result : str = text.lower()
     
 	# Replacing banwords
