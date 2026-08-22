@@ -51,3 +51,4 @@ async def update_orders():
             await user.send(
 				cur_message
 			)
+        del sm.state[sm.SM_TO_SEND][id]
