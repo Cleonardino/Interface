@@ -32,13 +32,9 @@ async def process_message(message : Message):
         if "tune" in content:
             output_message = """`////////////TUNING HELP==`
 `Tuning is the final step for completing the interface. When every user`
-`is tuned to the interface, all will be over`       
+`is stabilized, tune and all will be over`       
 `help tune             --- print this message`
-`tune(FREQ) PHASE      --- tune with user with id USER_ID using`
-`                          frequency FREQ`
-`freq                  --- get frequency information`
-`                          be used by other users to tune with you.`
-`                          The tuning frequency is updated every 3 minutes`
+`tune                  --- tune yourself`
 """
         else:
             output_message = """`////////////HELP==`
@@ -67,15 +63,37 @@ async def process_message(message : Message):
     
     # Stabilize
     if content.startswith("stabilize"):
-            open_par : int = content.find("(")
-            close_par : int = content.find(")")
-            if open_par < 0 or close_par < 0 or open_par >= close_par:
-                output_message = "`ERROR:SEND SYNTAX IS 'stabilize(TARGET_ID)'`"
+        open_par : int = content.find("(")
+        close_par : int = content.find(")")
+        if open_par < 0 or close_par < 0 or open_par >= close_par:
+            output_message = "`ERROR:SEND SYNTAX IS 'stabilize(TARGET_ID)'`"
+        else:
+            # Try stabilizing
+            output_message = await try_stabilize(
+                source=sm.state[sm.SM_USERS][user_id][sm.USR_FAKE_ID],
+                target=content[open_par+1:close_par]
+            )
+    
+    # Tune
+    if content.startswith("tune"):
+        if sm.state[sm.SM_USERS][user_id][sm.USR_TUNED]:
+            output_message = ("`ERROR:YOU ARE ALREADY TUNED. THERE IS NOTHING" + 
+            " ELSE TO DO IN THE CURRENT VERSION OF THE INTERFACE'`" +
+            "\n-# You can still help others tune to the interface.")
+        else:
+            possible = True
+            for id in sm.state[sm.SM_USERS]:
+                possible = possible and sm.state[sm.SM_USERS][id][sm.USR_STABLE]
+            if possible:
+                sm.state[sm.SM_USERS][user_id][sm.USR_TUNED] = True
+                output_message = """`////////////TUNED==`
+You are now TUNED to the Interface. There is nothing else to do in the current version
+of the Interface. Thanks for trying it !
+You can still help others tune to the interface.
+"""
+            
             else:
-                # Try stabilizing
-                output_message = try_stabilize(
-                    source=sm.state[sm.SM_USERS][user_id][sm.USR_FAKE_ID],
-                    target=content[open_par+1:close_par]
-                )
+                output_message = ("`ERROR:THERE IS STILL UNSTABILIZED USERS" + 
+                " YOU CANNOT TUNED WHILE SUCH USERS REMAINS'`")
     
     await message.author.send(output_message)

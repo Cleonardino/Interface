@@ -31,7 +31,7 @@ def try_send_order(source : str, target : str, content : str, stabilized : bool 
     if stabilized:
         return out_message
     else:
-        return (out_message + "\n`YOU ARE NOT CURRENTLY STABILIZED. YOU MAY" +
+        return (out_message + "\n`YOU ARE NOT CURRENTLY STABILIZED. YOU MAY " +
                 "ENCOUNTER LARGE DELAYS WHEN SENDING MESSAGES`")
 
 # Update the orders, sending messages if needed
