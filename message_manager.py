@@ -5,9 +5,11 @@ from synthetize import synthetize
 from sending import try_send_order
 from stabilize import try_stabilize
 from trigger_start import trigger_start
+from utils import print_log
 
 async def process_message(message : Message):
     user_id = str(message.author.id)
+    print_log("User {user_id}:{content}".format(user_id=user_id,content=message.content.lower()))
     if user_id not in sm.state[sm.SM_USERS]:
         # User not in database, add it and associate a unique id
         fake_id = create_unique_fake_id()
