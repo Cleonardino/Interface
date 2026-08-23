@@ -3,6 +3,7 @@ import state_manager as sm
 from id_manager import create_unique_fake_id
 from synthetize import synthetize
 from sending import try_send_order
+from stabilize import try_stabilize
 
 async def process_message(message : Message):
     user_id = str(message.author.id)
@@ -55,7 +56,7 @@ async def process_message(message : Message):
         open_par : int = content.find("(")
         close_par : int = content.find(")")
         if open_par < 0 or close_par < 0 or open_par >= close_par:
-            output_message = "`ERROR:SEND SYNTAX IS 'SEND(TARGET_ID) MESSAGE'`"
+            output_message = "`ERROR:SEND SYNTAX IS 'send(TARGET_ID) MESSAGE'`"
         else:
             output_message = try_send_order(
                 source=sm.state[sm.SM_USERS][user_id][sm.USR_FAKE_ID],
@@ -63,5 +64,18 @@ async def process_message(message : Message):
                 content=content[close_par+1:],
                 stabilized=sm.state[sm.SM_USERS][user_id][sm.USR_STABLE]
             )
+    
+    # Stabilize
+    if content.startswith("stabilize"):
+            open_par : int = content.find("(")
+            close_par : int = content.find(")")
+            if open_par < 0 or close_par < 0 or open_par >= close_par:
+                output_message = "`ERROR:SEND SYNTAX IS 'stabilize(TARGET_ID)'`"
+            else:
+                # Try stabilizing
+                output_message = try_stabilize(
+                    source=sm.state[sm.SM_USERS][user_id][sm.USR_FAKE_ID],
+                    target=content[open_par+1:close_par]
+                )
     
     await message.author.send(output_message)
