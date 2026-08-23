@@ -26,6 +26,16 @@ async def process_message(message : Message):
     if content.startswith("synt"):
         output_message = synthetize(user_id=user_id)
     
+    # Help
+    if content.startswith("help"):
+        output_message = """`////////////HELP==\n
+help                  --- print this message
+send(user_id) message --- send a message to the user with id user_id
+synt                  --- synthetize a piece of information
+stabilize(user_id)    --- stabilize message sending device of user with id user_id
+        `"""
+            
+    
     # Sending
     if content.startswith("send"):
         open_par : int = content.find("(")

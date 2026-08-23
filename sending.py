@@ -16,7 +16,7 @@ def try_send_order(source : str, target : str, content : str, stabilized : bool 
     message_id : int = sm.state[sm.SM_MSG_COUNTER]
     if not stabilized:
         # Not stabilized, add a random delay (in minutes)
-        time_to_send += randint(1,4)
+        time_to_send += randint(1,6)
     sm.state[sm.SM_TO_SEND][message_id] = {
 		sm.TS_TIME : time_to_send,
 		sm.TS_SOURCE : source,
