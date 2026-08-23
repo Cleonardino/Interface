@@ -4,6 +4,7 @@ from id_manager import create_unique_fake_id
 from synthetize import synthetize
 from sending import try_send_order
 from stabilize import try_stabilize
+from trigger_start import trigger_start
 
 async def process_message(message : Message):
     user_id = str(message.author.id)
@@ -95,5 +96,11 @@ You can still help others tune to the interface.
             else:
                 output_message = ("`ERROR:THERE IS STILL UNSTABILIZED USERS" + 
                 " YOU CANNOT TUNED WHILE SUCH USERS REMAINS'`")
+    
+    # Trigger Start
+    if content == "trigger_start":
+        trigger_start()
+        output_message = "Start has been triggered"
+        
     
     await message.author.send(output_message)
