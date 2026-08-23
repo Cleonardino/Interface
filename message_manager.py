@@ -28,12 +28,26 @@ async def process_message(message : Message):
     
     # Help
     if content.startswith("help"):
-        output_message = """`////////////HELP==\n
-help                  --- print this message
-send(user_id) message --- send a message to the user with id user_id
-synt                  --- synthetize a piece of information
-stabilize(user_id)    --- stabilize message sending device of user with id user_id
-        `"""
+        if "tune" in content:
+            output_message = """`////////////TUNING HELP==`
+`Tuning is the final step for completing the interface. When every user`
+`is tuned to the interface, all will be over`       
+`help tune             --- print this message`
+`tune(FREQ) PHASE      --- tune with user with id USER_ID using`
+`                          frequency FREQ`
+`freq                  --- get frequency information`
+`                          be used by other users to tune with you.`
+`                          The tuning frequency is updated every 3 minutes`
+"""
+        else:
+            output_message = """`////////////HELP==`
+`help                  --- print this message`
+`send(USER_ID) MESSAGE --- send a message to the user with id USER_ID`
+`synt                  --- synthetize a piece of information`
+`stabilize(USER_ID)    --- stabilize message sending device of user`
+`                          with id USER_ID`
+`help tune             --- print the tuning help message`
+"""
             
     
     # Sending
@@ -46,7 +60,8 @@ stabilize(user_id)    --- stabilize message sending device of user with id user_
             output_message = try_send_order(
                 source=sm.state[sm.SM_USERS][user_id][sm.USR_FAKE_ID],
                 target=content[open_par+1:close_par],
-                content=content[close_par+1:]
+                content=content[close_par+1:],
+                stabilized=sm.state[sm.SM_USERS][user_id][sm.USR_STABLE]
             )
     
     await message.author.send(output_message)

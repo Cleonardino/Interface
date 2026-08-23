@@ -14,6 +14,8 @@ USR_FAKE_ID = "fake_id"
 USR_SYNT_ROT = "synt_rot"
 USR_SYNT_MAX = "synt_max"
 USR_TARGET = "target"
+USR_STABLE = "stable"
+USR_TUNED = "tuned"
 
 # To send message constants
 TS_TIME = "time"

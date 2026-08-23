@@ -12,11 +12,11 @@ def try_send_order(source : str, target : str, content : str, stabilized : bool 
     if not content:
         return "`////////////SEND==\nERROR:CANNOT SEND EMPTY MESSAGE`"
     
-    time_to_send = sm.state[sm.SM_TIME] + 2
+    time_to_send = sm.state[sm.SM_TIME] + 1
     message_id : int = sm.state[sm.SM_MSG_COUNTER]
     if not stabilized:
         # Not stabilized, add a random delay (in minutes)
-        time_to_send += randint(1,6)
+        time_to_send += randint(2,6)
     sm.state[sm.SM_TO_SEND][message_id] = {
 		sm.TS_TIME : time_to_send,
 		sm.TS_SOURCE : source,
@@ -25,9 +25,14 @@ def try_send_order(source : str, target : str, content : str, stabilized : bool 
 	}
     
     sm.state[sm.SM_MSG_COUNTER] += randint(3,12)
-    return "`////////////SEND==\nMESSAGE#{message_id} SENT SUCCESSFULLY TO {target}`".format(
+    out_message : str = "`////////////SEND==\nMESSAGE#{message_id} SENT SUCCESSFULLY TO {target}`".format(
         message_id=message_id,target=target
-        )
+    )
+    if stabilized:
+        return out_message
+    else:
+        return (out_message + "\n`YOU ARE NOT CURRENTLY STABILIZED. YOU MAY" +
+                "ENCOUNTER LARGE DELAYS WHEN SENDING MESSAGES`")
 
 # Update the orders, sending messages if needed
 async def update_orders():
